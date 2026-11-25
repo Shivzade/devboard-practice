@@ -22,12 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: install linter
-        run: npm install eslint --save-dev
-
-      - name: Setup Eslint config files
-        run: npm init @eslint/config@latest
-
       - name: Run linter
         run: npm run lint
 
