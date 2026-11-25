@@ -21,12 +21,13 @@ export default [
       react,
       'react-hooks': reactHooks,
     },
-    rules: {
+     rules: {
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
-      'react/prop-types': 'off', // Optional: disables PropTypes warnings if you don't use them
+      'react/prop-types': 'off',
+      'react/no-unescaped-entities': 'off', // Allows normal ' and " in JSX text
     },
   },
 ];
