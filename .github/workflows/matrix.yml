@@ -2,7 +2,9 @@
 name: Go Linter
 
 on:
-    workflow_dispatch:
+   schedule:
+    - cron: '20 23 * * *'
+    #workflow_dispatch:
 
 jobs:
     Code-Format:
@@ -15,7 +17,7 @@ jobs:
         steps:
          - name: Checkout Code
            uses: actions/checkout@v7
-           
+
          - name: Set up Go
            uses: actions/setup-go@v7
            with:
