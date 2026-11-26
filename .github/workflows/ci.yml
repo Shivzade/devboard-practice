@@ -1,0 +1,35 @@
+# Goal - I have to lint, Build and test the code for frontend and backend
+# and push images into the docker
+
+name: CI
+
+on:
+    push:
+        branches: [advanced]
+
+jobs:
+    frontend:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+
+            - name: Setup Node Js
+              uses: actions/setup-node@v6
+              with:
+                node-version: "24"
+                cache: npm
+                dependency-path: frontend\package-lock.json
+
+            - name: Install NPM Packages
+              run: npm ci --legacy-peer-deps
+
+            - name: RUN Linter
+              run: npm run lint
+
+            - name: Run Tests
+              run: npm run test
+                
+              
+
+            
