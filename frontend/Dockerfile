@@ -1,25 +1,30 @@
-# Pin a specific node version
-FROM node:24-alpine
+# Stage 1 (Builder Stage ) - Used to build packages and apps
+FROM node:24 AS builder
 
-# Run as dedicated non-root user non root.
-RUN addgroup -S app && adduser -S -G app app
+# This will create a folder and make it as PWD
+WORKDIR /app
+
+# Copy all the code
+COPY . .
+
+# This will install all the packages
+RUN npm install --legacy-peer-deps
+
+# This will create a folder call /dist
+RUN npm run build  --legacy-peer-deps
+
+
+#------------ Stage 1 complete --------
+
+#Stage 2 (runner Stage) - Used to run the application from the builder stage
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
-# Install deps first for better layer caching
-COPY package*.json ./
-RUN npm ci --legacy-peer-deps
+COPY package.json . 
 
-# Copy the source and build the production bundle into /dist
-COPY . .
-RUN npm run build --legacy-peer-deps
+RUN npm install -g vite
 
-# Hand ownership to the non-root user, then drop previlages
-RUN chown -R app:app /app
-USER app
+COPY --from=builder /app/dist ./dist
 
-# Vite preview serves built bundle to this port
-EXPOSE 4173
-
-# 0.0.0.0 so the server is reachable from outside the container. 
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"] 
