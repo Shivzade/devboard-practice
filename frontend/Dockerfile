@@ -21,7 +21,7 @@ WORKDIR /app
 
 COPY package.json . 
 
-RUN npm install -g vite
+RUN npm install -g vite@6.0.1
 
 COPY --from=builder /app/dist ./dist
 
