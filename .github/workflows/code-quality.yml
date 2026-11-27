@@ -1,0 +1,47 @@
+# Goal: I have to do SAST for my Code
+
+name: Code Quality
+
+on:
+    workflow_call:
+
+jobs:
+    sast:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v7
+
+            - name: Setup Node Js
+              uses: actions/setup-node@v6
+              with:
+                node-version: "24"
+                cache: npm
+                dependency-path: frontend\package-lock.json
+
+            - name: Install NPM Packages
+              run: npm ci --legacy-peer-deps
+              #working-directory: frontend
+
+            - name: RUN Linter
+              run: npm run lint
+              working-directory: frontend
+
+            - name: Run Tests
+              run: npm run test
+
+            - name: Set up Go
+              uses: actions/setup-go@v7
+              with:
+                go-version: "1.23"
+                go-version-file: 'go.mod'
+                check-latest: false
+                cache-dependency-path: 'go.sum'
+
+            - name: Run Go Formatter
+              run: go fmt
+              working-directory: backend
+
+            - name: RUN Go vet
+              run: go vet
+              working-directory: backend
