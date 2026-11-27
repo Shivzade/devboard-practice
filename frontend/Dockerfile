@@ -8,8 +8,10 @@ WORKDIR /app
 COPY . .
 
 # This will install all the packages
-RUN npm install --legacy-peer-deps \
-&& npm run build --legacy-peer-deps
+RUN npm install --legacy-peer-deps
+
+# This will create a folder call /dist
+RUN npm run build  --legacy-peer-deps
 
 
 #------------ Stage 1 complete --------
@@ -21,7 +23,7 @@ WORKDIR /app
 
 COPY package.json . 
 
-RUN npm install -g vite@6.0.1
+RUN npm install -g vite
 
 COPY --from=builder /app/dist ./dist
 
