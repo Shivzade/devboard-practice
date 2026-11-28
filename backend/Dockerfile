@@ -17,7 +17,7 @@ WORKDIR /app
 # Copy only the compiled binary from the builder stage
 COPY --from=builder /app/devboard-backend ./devboard-backend
 
-RUN chmod +x ./devboard-backend
+RUN chmod=0755 ./devboard-backend
 
 USER nonroot
 
