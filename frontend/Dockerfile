@@ -15,7 +15,7 @@ RUN npm install --legacy-peer-deps \
 #------------ Stage 1 complete --------
 
 #Stage 2 (runner Stage) - Used to run the application from the builder stage
-FROM node:24-alpine AS runner
+FROM dhi.io/docker-hardened/node:24 AS runner
 
 WORKDIR /app
 
