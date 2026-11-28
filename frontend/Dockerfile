@@ -1,5 +1,5 @@
 # Stage 1 (Builder Stage ) - Used to build packages and apps
-FROM node:24 AS builder
+FROM dhi.io/node:22-dev AS builder
 
 # This will create a folder and make it as PWD
 WORKDIR /app
@@ -15,7 +15,7 @@ RUN npm install --legacy-peer-deps \
 #------------ Stage 1 complete --------
 
 #Stage 2 (runner Stage) - Used to run the application from the builder stage
-FROM dhi.io/docker-hardened/node:24 AS runner
+FROM dhi.io/node:22-dev AS runner
 
 WORKDIR /app
 
