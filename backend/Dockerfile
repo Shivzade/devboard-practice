@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
@@ -9,9 +9,17 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -o devboard-backend .
 
-# Run as a non-root user
-RUN adduser -D -u 10001 app && chown -R app:app /app
-USER app
+# Stage 2: Minimal runtimege
+FROM dhi.io/golang:1-alpine
+
+WORKDIR /app
+
+# Copy only the compiled binary from the builder stage
+COPY --from=builder /app/devboard-backend ./devboard-backend
+
+RUN chmod +x ./devboard-backend
+
+USER nonroot
 
 EXPOSE 8080
 
