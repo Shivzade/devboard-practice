@@ -9,18 +9,17 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -o devboard-backend .
 
-# Stage 2: Minimal runtimege
+# Stage 2: Minimal runtime
 FROM dhi.io/golang:1-alpine
 
 WORKDIR /app
 
-# Copy only the compiled binary from the builder stage
-COPY --from=builder /app/devboard-backend ./devboard-backend
-
-RUN chmod=0755 ./devboard-backend
+# Use --chmod=0755 on COPY instead of a separate RUN chmod command
+COPY --from=builder --chmod=0755 /app/devboard-backend ./devboard-backend
 
 USER nonroot
 
 EXPOSE 8080
 
 ENTRYPOINT ["./devboard-backend"]
+
